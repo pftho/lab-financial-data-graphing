@@ -1,5 +1,6 @@
 const fromDateInput = document.getElementById("fromDate");
 const toDateInput = document.getElementById("toDate");
+const submitBtn = document.getElementById("updateData");
 
 function drawData() {
   const apiUrl =
@@ -16,41 +17,26 @@ function drawData() {
 
 drawData();
 
-const submitBtn = document.getElementById("updateData");
-
-
 function updateData() {
   console.log("running update dataaa");
   let currency = "usd";
   let fromDate = fromDateInput.value;
   let toDate = toDateInput.value;
-
-  console.log(fromDateInput, toDateInput);
-  console.log("Initial fromDate", fromDate, "Initial toDate", fromDate);
-
   const updateApiUrl = `http://api.coindesk.com/v1/bpi/historical/close.json?start=${fromDate}&end=${toDate}&currency=${currency}`;
-
-  console.log(updateApiUrl);
 
   axios
     .get(updateApiUrl)
     .then((response) => {
-      // console.log("data", response.data);
       printChart(response.data);
     })
     .catch((err) => console.log(err));
 }
 
-updateData();
-
-// call the function again with the function
-//destroy
+// PRINT CHART
 
 function printChart(dataToPrint) {
-  //  console.log(dataToPrint);
   const dates = Object.keys(dataToPrint.bpi);
   const bpi = dates.map((date) => dataToPrint.bpi[date]);
-
   const ctx = document.getElementById("chart-canvas").getContext("2d");
   const chart = new Chart(ctx, {
     type: "line",
@@ -71,17 +57,16 @@ function printChart(dataToPrint) {
 // DOM
 
 submitBtn.addEventListener("click", () => {
-    console.log("running");
-    updateData();
-  });
-  
-  fromDateInput.addEventListener("change", (e) => {
-    fromDate = fromDateInput.value;
-    console.log("Updated fromDate", fromDate);
-  });
-  
-  toDateInput.addEventListener("change", (e) => {
-    toDate = toDateInput.value;
-    console.log("Updated toDate", toDate);
-  });
-  
+  console.log("running");
+  updateData();
+});
+
+fromDateInput.addEventListener("change", (e) => {
+  fromDate = fromDateInput.value;
+  console.log("Updated fromDate", fromDate);
+});
+
+toDateInput.addEventListener("change", (e) => {
+  toDate = toDateInput.value;
+  console.log("Updated toDate", toDate);
+});
